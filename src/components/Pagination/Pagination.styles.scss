@@ -1,0 +1,37 @@
+.paginationContainer {
+  .title {
+    display: grid;
+    place-items: center;
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .paginationItem {
+    background: #fff;
+    padding: 10px 15px;
+    border: none;
+    height: 25px;
+    width: 25px;
+    position: relative;
+    margin: 0 5px;
+    cursor: pointer;
+    color: #aaaaaa;
+    font-size: 20px;
+  }
+
+  .paginationItem span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .paginationItem.active {
+    border: none;
+    color: #f55c47;
+    pointer-events: none;
+  }
+}

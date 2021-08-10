@@ -1,37 +1,69 @@
 .paginationContainer {
-  .title {
-    display: grid;
-    place-items: center;
-  }
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 25px;
+
   .pagination {
     display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
-  .paginationItem {
-    background: #fff;
-    padding: 10px 15px;
-    border: none;
-    height: 25px;
-    width: 25px;
-    position: relative;
-    margin: 0 5px;
-    cursor: pointer;
-    color: #aaaaaa;
-    font-size: 20px;
-  }
+    &_prevBtn {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #557da526;
+      border-radius: 5px;
+      background-color: #a9afbc02;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
 
-  .paginationItem span {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
 
-  .paginationItem.active {
-    border: none;
-    color: #f55c47;
-    pointer-events: none;
+      &_icon {
+        height: 10px;
+      }
+    }
+
+    &_pagenumber {
+      min-width: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 30px;
+      background: #43afff33 0% 0% no-repeat padding-box;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0px;
+      color: #303f60;
+      margin: 0 10px;
+      cursor: default;
+    }
+
+    &_nextBtn {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #557da526;
+      border-radius: 5px;
+      background: #a9afbc02;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &_icon {
+        height: 12px;
+      }
+    }
   }
 }

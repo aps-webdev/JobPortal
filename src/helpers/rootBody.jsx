@@ -5,7 +5,12 @@ import { selectHeight } from '../redux/auth/auth.selector';
 
 const Helper = ({ height }) => {
   return ReactDOM.createPortal(
-    <div style={{ background: '#EDF6FF', height: height }}></div>,
+    <div
+      style={{
+        background: '#EDF6FF',
+        height: Math.max(height, window.innerHeight),
+      }}
+    ></div>,
     document.getElementById('root-body')
   );
 };

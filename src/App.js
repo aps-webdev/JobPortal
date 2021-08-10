@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  useHistory,
+  Redirect,
+  withRouter,
+} from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 
 import Helper from './helpers/rootBody';
@@ -18,7 +24,10 @@ import {
   selectIsRecruiterLogged,
   selectUserName,
 } from './redux/auth/auth.selector';
-import { clearSessionStorage } from './helpers/sessionStorage';
+import {
+  clearSessionStorage,
+  getSessionStorage,
+} from './helpers/sessionStorage';
 
 function App(props) {
   const history = useHistory();
@@ -28,6 +37,9 @@ function App(props) {
     history.push('/');
   };
 
+  let isLoggedIn = !!getSessionStorage('token') ? true : false;
+  let isRecruiter = getSessionStorage('userRole') === '0' ? true : false;
+
   return (
     <React.Fragment>
       <Header
@@ -36,16 +48,74 @@ function App(props) {
         name={props.name}
       />
       <Switch>
-        <Route exact path='/' component={LandingPage} />
-        <Route path='/login' component={LoginPage} />
-        <Route path='/signup' component={SignUpPage} />
-        <Route path='/changepassword' component={ForgotPasswordPage} />
-        <Route exact path='/recruiter' component={HomePage} />
-        <Route path='/recruiter/postjob' component={PostAJob} />
-        <Route exact path='/candidate' component={HomePage} />
-        <Route exact path='/candidate/alljobs' component={HomePage} />
         <Route
-          path=''
+          exact
+          path='/'
+          render={() =>
+            isLoggedIn && isRecruiter ? (
+              <Redirect to='/recruiter' />
+            ) : isLoggedIn && !isRecruiter ? (
+              <Redirect to='/candidate' />
+            ) : (
+              <LandingPage />
+            )
+          }
+        />
+        <Route
+          exact
+          path='/login'
+          render={() =>
+            isLoggedIn && isRecruiter ? (
+              <Redirect to='/recruiter' />
+            ) : isLoggedIn && !isRecruiter ? (
+              <Redirect to='/candidate' />
+            ) : (
+              <LoginPage />
+            )
+          }
+        />
+        <Route
+          exact
+          path='/signup'
+          render={() =>
+            isLoggedIn && isRecruiter ? (
+              <Redirect to='/recruiter' />
+            ) : isLoggedIn && !isRecruiter ? (
+              <Redirect to='/candidate' />
+            ) : (
+              <SignUpPage />
+            )
+          }
+        />
+        <Route path='/changepassword' component={ForgotPasswordPage} />
+        <Route
+          exact
+          path='/recruiter'
+          render={() => (!isLoggedIn ? <Redirect to='/' /> : <HomePage />)}
+        />
+        <Route
+          exact
+          path='/recruiter/postjob'
+          render={() =>
+            isLoggedIn && isRecruiter ? <PostAJob /> : <Redirect to='/' />
+          }
+        />
+        <Route
+          exact
+          path='/candidate'
+          render={() =>
+            isLoggedIn && !isRecruiter ? <HomePage /> : <Redirect to='/' />
+          }
+        />
+        <Route
+          exact
+          path='/candidate/alljobs'
+          render={() =>
+            isLoggedIn && isRecruiter ? <Redirect to='/' /> : <HomePage />
+          }
+        />
+        <Route
+          path='*'
           render={(props) => (
             <PageNotFound
               {...props}
@@ -65,4 +135,4 @@ const mapStateToProps = createStructuredSelector({
   name: selectUserName,
 });
 
-export default connect(mapStateToProps, null)(App);
+export default withRouter(connect(mapStateToProps, null)(App));

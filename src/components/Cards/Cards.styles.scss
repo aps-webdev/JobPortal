@@ -33,8 +33,16 @@
 
 .actionCard {
   @include cardStyle;
+  @include flex;
+  flex-direction: column;
+  align-items: stretch;
   max-width: 260px;
+  min-width: 260px;
   padding: 15px;
+
+  &.clikableCard {
+    cursor: pointer;
+  }
 
   &_head {
     font-size: 17px;
@@ -46,11 +54,20 @@
   &_body {
     @include cardBodyStyle;
     opacity: 0.8;
+    overflow: hidden;
   }
 
   &_footer {
     @include flex;
     margin-top: 15px;
+
+    &_message {
+      visibility: hidden;
+      font-size: 12px;
+      color: #ff0000;
+      opacity: 0.8;
+      text-align: end;
+    }
 
     &_location {
       @include flex;
@@ -87,13 +104,13 @@
       justify-content: center;
       align-items: center;
       margin-right: 20px;
-
     }
 
     .details {
       display: flex;
       flex-direction: column;
       align-content: space-between;
+      overflow: hidden;
 
       &_name {
         font-size: 15px;

@@ -21,11 +21,17 @@ function ActionCard({
   location,
   btnLabel,
   onClick,
+  onCardClick,
+  message,
   ...restProps
 }) {
   return (
     <React.Fragment>
-      <div className='actionCard' {...restProps}>
+      <div
+        className={`actionCard${onCardClick ? ' clikableCard' : ''}`}
+        {...restProps}
+        onClick={onCardClick}
+      >
         <div className='actionCard_head'>{title}</div>
         <div className='actionCard_body'>{text}</div>
         <div className='actionCard_footer'>
@@ -37,6 +43,7 @@ function ActionCard({
             <Button action onClick={onClick}>
               {btnLabel}
             </Button>
+            <div className='actionCard_footer_message'>{message}</div>
           </div>
         </div>
       </div>
@@ -44,12 +51,14 @@ function ActionCard({
   );
 }
 
-function AvatarCard({name, email , skills,...restProps }) {
+function AvatarCard({ name, email, skills, ...restProps }) {
   return (
     <React.Fragment>
       <div className='avatarCard' {...restProps}>
         <div className='avatarCard_head'>
-          <div className='avatarCard_head_avatar'>{name.charAt(0).toUpperCase()}</div>
+          <div className='avatarCard_head_avatar'>
+            {name.charAt(0).toUpperCase()}
+          </div>
           <div className='details'>
             <div className='details_name'>{name}</div>
             <div className='details_email'>{email}</div>
@@ -57,9 +66,7 @@ function AvatarCard({name, email , skills,...restProps }) {
         </div>
         <div className='avatarCard_body'>
           <p className='avatarCard_body_title'>Skills</p>
-          <div className='avatarCard_body_description'>
-            {skills}
-          </div>
+          <div className='avatarCard_body_description'>{skills}</div>
         </div>
       </div>
     </React.Fragment>
@@ -81,8 +88,8 @@ ActionCard.defaultProps = {
 AvatarCard.defaultProps = {
   name: 'Applicant Name',
   email: 'Applicant Email',
-  skills: 'Skills goes here'
-}
+  skills: 'Skills goes here',
+};
 
 const Cards = { InfoCard, ActionCard, AvatarCard };
 

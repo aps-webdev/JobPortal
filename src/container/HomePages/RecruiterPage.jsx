@@ -5,29 +5,40 @@ import NoJobs from '../../assets/no_data.png';
 import Modal from '../../components/Modal/Modal.index';
 import Cards from '../../components/Cards/Cards.index';
 import NoData from '../../components/NoData/NoData.index';
-import { POSTED_JOBS, APLICANTS_FOR_JOB } from '../../helpers/DummyData';
 
 import { useRecruiterController } from './useRecruiterController';
 import { connect } from 'react-redux';
 import { setBodyHeight } from '../../redux/auth/auth.action';
+import Pagination from '../../components/Pagination/Pagination.index';
 
 function RecruitHomePage(props) {
-  const { toggleModal, isModalOpen, handlePostJob } =
-    useRecruiterController(props);
+  const {
+    isModalOpen,
+    handlePostJob,
+    toggleModal,
+    postedJobs,
+    metaData,
+    pageNumber,
+    goToNextPage,
+    goToPreviousPage,
+    jobApplicants,
+  } = useRecruiterController(props);
 
   const bodyRef = useRef(null);
 
   useEffect(() => {
     props.setBodyHeight(bodyRef.current.clientHeight);
-  }, [props]);
+  });
+
+  let bottomPlacement = bodyRef.current && bodyRef.current.clientHeight;
 
   return (
     <React.Fragment>
       <div className='recruiterPage' ref={bodyRef}>
         <div className='recruiterPage_title'>Jobs posted by you</div>
-        {1 ? (
+        {postedJobs.length ? (
           <div className='recruiterPage_postedJob'>
-            {POSTED_JOBS.map((job, idx) => {
+            {postedJobs.map((job, idx) => {
               return (
                 <Cards.ActionCard
                   key={idx}
@@ -36,7 +47,7 @@ function RecruitHomePage(props) {
                   location={job.location}
                   btnLabel='View applications'
                   style={{ margin: '20px 0 0' }}
-                  onClick={toggleModal}
+                  onClick={() => toggleModal(job.id)}
                 />
               );
             })}
@@ -51,20 +62,33 @@ function RecruitHomePage(props) {
             />
           </div>
         )}
+        <Pagination
+          style={{ top: bottomPlacement }}
+          data={postedJobs}
+          limit={metaData.limit}
+          maxCount={metaData.count}
+          pageNumber={pageNumber.page}
+          goToNextPage={goToNextPage}
+          goToPreviousPage={goToPreviousPage}
+        />
       </div>
       {isModalOpen ? (
         <Modal
           text='Applicants for this job'
-          description='Total 35 applications'
+          description={
+            jobApplicants.length > 0
+              ? `Total ${jobApplicants.length} applications`
+              : `0 applications`
+          }
           onClose={toggleModal}
         >
-          {0 ? (
+          {!jobApplicants.length ? (
             <div className='modalNoDataChild'>
               <NoData info='No applications available!' />
             </div>
           ) : (
             <div className='modalDataChild'>
-              {APLICANTS_FOR_JOB.map((applicant, idx) => {
+              {jobApplicants.map((applicant, idx) => {
                 return (
                   <Cards.AvatarCard
                     key={idx}

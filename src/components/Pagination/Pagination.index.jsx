@@ -1,87 +1,43 @@
 import React from 'react';
 
 import './Pagination.styles.scss';
-import Button from '../Button/Button.index';
+import Next from '../../assets/next-arrow.png';
+import Prev from '../../assets/prev-arrow.png';
 
-function Pagination({ data, RenderComponent, title, pageLimit, dataLimit }) {
-  const [pages] = React.useState(Math.round(data.length / dataLimit));
-  const [currentPage, setCurrentPage] = React.useState(1);
-
+function Pagination({
+  limit,
+  maxCount,
+  pageNumber,
+  goToNextPage,
+  goToPreviousPage,
+  ...restProps
+}) {
   React.useEffect(() => {
     window.scrollTo({ behavior: 'smooth', top: '0px' });
-  }, [currentPage]);
-
-  function goToNextPage() {
-    setCurrentPage((page) => page + 1);
-  }
-
-  function goToPreviousPage() {
-    setCurrentPage((page) => page - 1);
-  }
-
-  function changePage(event) {
-    const pageNumber = Number(event.target.textContent);
-    setCurrentPage(pageNumber);
-  }
-
-  const getPaginatedData = () => {
-    const startIndex = currentPage * dataLimit - dataLimit;
-    const endIndex = startIndex + dataLimit;
-    return data.slice(startIndex, endIndex);
-  };
-
-  const getPaginationGroup = () => {
-    let start = Math.floor((currentPage - 1) / pageLimit) * pageLimit;
-    return new Array(pageLimit).fill().map((_, idx) => start + idx + 1);
-  };
+  });
 
   return (
-    <div className='paginationContainer'>
-      <h1 className='title'>{title}</h1>
-
-      {/* show the posts, 10 posts at a time */}
-      <div className='dataContainer'>
-        {getPaginatedData().map((d, idx) => (
-          <RenderComponent key={idx} data={d} />
-        ))}
-      </div>
-
-      {/* show the pagiantion
-        it consists of next and previous buttons
-        along with page numbers, in our case, 5 page
-        numbers at a time
-    */}
+    <div className='paginationContainer' {...restProps}>
       <div className='pagination'>
-        {/* previous button */}
-        <Button
-          isSecondary
+        <button
+          className='pagination_prevBtn'
           onClick={goToPreviousPage}
-          disabled={currentPage === 1 ? true : ''}
+          disabled={pageNumber === 1 ? true : ''}
         >
-          &#10094; prev
-        </Button>
+          <img src={Prev} alt='prev' className='pagination_prevBtn_icon' />
+        </button>
 
-        {/* show page numbers */}
-        {getPaginationGroup().map((item, index) => (
-          <button
-            key={index}
-            onClick={changePage}
-            className={`paginationItem ${
-              currentPage === item ? 'active' : null
-            }`}
-          >
-            <span>{item}</span>
-          </button>
-        ))}
+        <div className='pagination_pagenumber'>
+          <span>{pageNumber}</span>
+        </div>
 
-        {/* next button */}
-        <Button
-          isSecondary
+        <button
+          className='pagination_nextBtn'
           onClick={goToNextPage}
-          disabled={currentPage === pages ? true : ''}
+          disabled={pageNumber * limit >= maxCount ? true : ''}
         >
-          next &#10095;
-        </Button>
+          <img src={Next} alt='next' className='pagination_nextBtn_icon' />
+        </button>
       </div>
     </div>
   );

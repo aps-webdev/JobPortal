@@ -66,10 +66,21 @@ function LeftHeaderNav({ name, ...restProps }) {
   const history = useHistory();
 
   const handleLogout = () => {
-    history.push('/');
-    setIsDropdownOpen(!isDropdownOpen);
     toastRef.current.openToast('Logout', 'You have successfully logged out.');
+    setIsDropdownOpen((prevState) => !prevState);
     clearSessionStorage();
+    history.push({
+      pathname: '/',
+      state: {
+        isLoggedIn: !!getSessionStorage('token'),
+        isRecruiter: getSessionStorage('userRole') === '0',
+      },
+    });
+    console.log(
+      'HAHAHAHALAAGGGG GYE',
+      !!getSessionStorage('token'),
+      getSessionStorage('userRole') === '0'
+    );
   };
 
   const isLoggedIn = !!getSessionStorage('token') ? true : false;
@@ -95,9 +106,9 @@ function LeftHeaderNav({ name, ...restProps }) {
         ) : (
           <NavLink
             className={`leftMenu_link${activeClass}`}
-            to={`${pathname}/alljobs`}
+            to={`${pathname}`}
           >
-            View all Job
+            Already applied Jobs
           </NavLink>
         )}
         <div className='leftMenu_avatar'>{name.charAt(0).toUpperCase()}</div>

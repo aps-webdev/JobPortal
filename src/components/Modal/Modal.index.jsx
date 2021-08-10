@@ -5,7 +5,7 @@ import './Modal.styles.scss';
 import Close from '../../assets/close.png';
 import Backdrop from '../Backdrop/Backdrop.index';
 
-function Modal({ text, description, width, children, onClose }) {
+function Modal({ text, description, width, children, onClose, minHeight }) {
   return (
     <React.Fragment>
       <div className='modal'>
@@ -16,7 +16,10 @@ function Modal({ text, description, width, children, onClose }) {
           </div>
           <div className='modal_header_description'>{description}</div>
         </div>
-        <div className='modal_body' style={{ width: `${width}` }}>
+        <div
+          className='modal_body'
+          style={{ width: `${width}`, minHeight: `${minHeight}` }}
+        >
           {children}
         </div>
       </div>

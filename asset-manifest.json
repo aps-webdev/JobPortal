@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/job-portal/static/css/main.4f43f702.chunk.css",
+    "main.js": "/job-portal/static/js/main.73c95808.chunk.js",
+    "main.js.map": "/job-portal/static/js/main.73c95808.chunk.js.map",
+    "runtime-main.js": "/job-portal/static/js/runtime-main.7aebd911.js",
+    "runtime-main.js.map": "/job-portal/static/js/runtime-main.7aebd911.js.map",
+    "static/js/2.861f7476.chunk.js": "/job-portal/static/js/2.861f7476.chunk.js",
+    "static/js/2.861f7476.chunk.js.map": "/job-portal/static/js/2.861f7476.chunk.js.map",
+    "index.html": "/job-portal/index.html",
+    "static/css/main.4f43f702.chunk.css.map": "/job-portal/static/css/main.4f43f702.chunk.css.map",
+    "static/js/2.861f7476.chunk.js.LICENSE.txt": "/job-portal/static/js/2.861f7476.chunk.js.LICENSE.txt",
+    "static/media/Scarecrow.63343086.png": "/job-portal/static/media/Scarecrow.63343086.png",
+    "static/media/candidates_primary.873abb78.png": "/job-portal/static/media/candidates_primary.873abb78.png",
+    "static/media/candidates_secondary.79050a6f.png": "/job-portal/static/media/candidates_secondary.79050a6f.png",
+    "static/media/close.ed4432cd.png": "/job-portal/static/media/close.ed4432cd.png",
+    "static/media/cover.b4c78f83.jpg": "/job-portal/static/media/cover.b4c78f83.jpg",
+    "static/media/location.c11be609.png": "/job-portal/static/media/location.c11be609.png",
+    "static/media/next-arrow.6c421310.png": "/job-portal/static/media/next-arrow.6c421310.png",
+    "static/media/no_data.2ec70921.png": "/job-portal/static/media/no_data.2ec70921.png",
+    "static/media/prev-arrow.7c1a0db0.png": "/job-portal/static/media/prev-arrow.7c1a0db0.png",
+    "static/media/recruiter_primary.56fd7cae.png": "/job-portal/static/media/recruiter_primary.56fd7cae.png",
+    "static/media/recruiter_secondary.4f19b0de.png": "/job-portal/static/media/recruiter_secondary.4f19b0de.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7aebd911.js",
+    "static/js/2.861f7476.chunk.js",
+    "static/css/main.4f43f702.chunk.css",
+    "static/js/main.73c95808.chunk.js"
+  ]
+}

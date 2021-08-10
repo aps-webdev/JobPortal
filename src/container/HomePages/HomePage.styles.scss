@@ -34,9 +34,9 @@
 }
 
 .modalDataChild {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  grid-column-gap: 9em;
+  display: inline-grid;
+  grid-template-columns: auto auto;
 }
 
 .candidatePage {

@@ -8,16 +8,37 @@ export const useRecruiterController = () => {
   const [postedJobs, setPostedJobs] = useState([]);
   const [metaData, setMetaData] = useState({});
   const [jobApplicants, setJobApplicants] = useState([]);
+  const [jobId, setJobId] = useState();
 
   const { pathname } = useLocation();
   let history = useHistory();
 
   useEffect(() => {
     getRequest('recruiters/jobs', { ...pageNumber }).then((response) => {
-      setPostedJobs([...response.data.data]);
-      setMetaData(response.data.metadata);
+      if (typeof response.message === 'string') {
+        return;
+      } else {
+        setPostedJobs([...response.data.data]);
+        setMetaData(response.data.metadata);
+      }
     });
   }, [pageNumber]);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      getRequest(`recruiters/jobs/${jobId}/candidates`).then((response) => {
+        console.log('brrrruuuuuuuuuuuuuu', response);
+        if (
+          typeof response === 'string' ||
+          typeof response.message === 'string'
+        ) {
+          return;
+        } else {
+          setJobApplicants([...response.data]);
+        }
+      });
+    }
+  }, [isModalOpen]);
 
   function goToNextPage() {
     setPageNumber((page) => ({
@@ -38,10 +59,8 @@ export const useRecruiterController = () => {
   };
 
   const toggleModal = (jobId) => {
-    setIsModalOpen(!isModalOpen);
-    getRequest(`recruiters/jobs/${jobId}/candidates`).then((response) => {
-      setJobApplicants([...response.data]);
-    });
+    setIsModalOpen((prevState) => !prevState);
+    setJobId(jobId);
   };
 
   return {

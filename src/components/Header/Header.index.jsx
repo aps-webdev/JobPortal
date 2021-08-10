@@ -69,18 +69,13 @@ function LeftHeaderNav({ name, ...restProps }) {
     toastRef.current.openToast('Logout', 'You have successfully logged out.');
     setIsDropdownOpen((prevState) => !prevState);
     clearSessionStorage();
-    history.push({
+    setTimeout(() => history.push({
       pathname: '/',
       state: {
         isLoggedIn: !!getSessionStorage('token'),
         isRecruiter: getSessionStorage('userRole') === '0',
       },
-    });
-    console.log(
-      'HAHAHAHALAAGGGG GYE',
-      !!getSessionStorage('token'),
-      getSessionStorage('userRole') === '0'
-    );
+    }), 3000)
   };
 
   const isLoggedIn = !!getSessionStorage('token') ? true : false;

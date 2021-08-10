@@ -19,7 +19,10 @@ export const getRequest = (url, params = {}) => {
     .then(async (response) => {
       const data = await response.json();
       if (!response.ok) {
-        const error = (data && data.message) || response.statusText;
+        const error =
+          (data && data.message) ||
+          (data && data.errors) ||
+          response.statusText;
         return Promise.reject(error);
       }
       return data;

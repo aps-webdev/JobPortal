@@ -30,7 +30,9 @@ function RecruitHomePage(props) {
     props.setBodyHeight(bodyRef.current.clientHeight);
   });
 
-  let bottomPlacement = bodyRef.current && bodyRef.current.clientHeight;
+  let bottomPlacement =
+    bodyRef.current &&
+    Math.max(bodyRef.current.clientHeight, window.innerHeight);
 
   return (
     <React.Fragment>
@@ -62,15 +64,16 @@ function RecruitHomePage(props) {
             />
           </div>
         )}
-        <Pagination
-          style={{ top: bottomPlacement }}
-          data={postedJobs}
-          limit={metaData.limit}
-          maxCount={metaData.count}
-          pageNumber={pageNumber.page}
-          goToNextPage={goToNextPage}
-          goToPreviousPage={goToPreviousPage}
-        />
+        {postedJobs.length ? (
+          <Pagination
+            style={{ top: bottomPlacement }}
+            limit={metaData.limit}
+            maxCount={metaData.count}
+            pageNumber={pageNumber.page}
+            goToNextPage={goToNextPage}
+            goToPreviousPage={goToPreviousPage}
+          />
+        ) : null}
       </div>
       {isModalOpen ? (
         <Modal

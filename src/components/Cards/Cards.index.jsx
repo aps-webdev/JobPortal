@@ -51,7 +51,7 @@ function ActionCard({
   );
 }
 
-function AvatarCard({ name, email, skills, ...restProps }) {
+function AvatarCard({ name, email, skills,noSkills, ...restProps }) {
   return (
     <React.Fragment>
       <div className='avatarCard' {...restProps}>
@@ -65,7 +65,7 @@ function AvatarCard({ name, email, skills, ...restProps }) {
           </div>
         </div>
         <div className='avatarCard_body'>
-          <p className='avatarCard_body_title'>Skills</p>
+          <p className='avatarCard_body_title'>{noSkills ? null :'Skills'}</p>
           <div className='avatarCard_body_description'>{skills}</div>
         </div>
       </div>

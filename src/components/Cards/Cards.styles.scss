@@ -60,6 +60,7 @@
   &_footer {
     @include flex;
     margin-top: 15px;
+    overflow: hidden;
 
     &_message {
       visibility: hidden;
@@ -87,6 +88,7 @@
   @include cardStyle;
   max-width: 302px;
   padding: 15px;
+  border: 1px solid #303F6080;
 
   &_head {
     display: flex;
@@ -111,6 +113,7 @@
       flex-direction: column;
       align-content: space-between;
       overflow: hidden;
+      max-width: 80%;
 
       &_name {
         font-size: 15px;

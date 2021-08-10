@@ -60,14 +60,16 @@ function CandidateHomePage(props) {
             <NoData icon={NoJobs} info='Available jobs will show here!' />
           </div>
         )}
-        <Pagination
-          style={{ top: bottomPlacement }}
-          limit={metaData.limit}
-          maxCount={metaData.count}
-          pageNumber={pageNumber.page}
-          goToNextPage={goToNextPage}
-          goToPreviousPage={goToPreviousPage}
-        />
+        {availableJobs.length ? (
+          <Pagination
+            style={{ top: bottomPlacement }}
+            limit={metaData.limit}
+            maxCount={metaData.count}
+            pageNumber={pageNumber.page}
+            goToNextPage={goToNextPage}
+            goToPreviousPage={goToPreviousPage}
+          />
+        ) : null}
       </div>
       {isModalOpen ? (
         <Modal
@@ -93,7 +95,8 @@ function CandidateHomePage(props) {
                     name={job.title}
                     email={job.description}
                     skills={job.location}
-                    style={{ marginBottom: '30px', minWidth: '50%' }}
+                    style={{ marginBottom: '30px', minWidth: '100%' }}
+                    noSkills={true}
                   />
                 );
               })}

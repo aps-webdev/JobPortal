@@ -9,7 +9,7 @@ export class Toast extends PureComponent {
     isActive: false,
   };
 
-  openToast = (message = 'Error', title = 'Problem Occured') => {
+  openToast = (title = 'Problem Occured', message = 'Error') => {
     this.setState({ message: message, title: title });
     this.setState({ isActive: true }, () => {
       setTimeout(() => {

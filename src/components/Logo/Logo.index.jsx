@@ -1,7 +1,7 @@
 import React from 'react';
 import './Logo.index.scss';
 
-const Logo = ({ size }) => {
+const Logo = ({ size, ...restProps }) => {
   let logoClasses = ['logo'];
   switch (size) {
     case 'small':
@@ -15,7 +15,7 @@ const Logo = ({ size }) => {
   }
   return (
     <React.Fragment>
-      <p className={logoClasses.join(' ')}>
+      <p className={logoClasses.join(' ')} {...restProps}>
         My<span className='logo_job'>Jobs</span>
       </p>
     </React.Fragment>

@@ -1,46 +1,56 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { NavLink, useLocation, useHistory } from 'react-router-dom';
+import { NavLink, useLocation, useHistory, withRouter } from 'react-router-dom';
 import './Header.styles.scss';
 
 import Logo from '../Logo/Logo.index';
 import Button from '../Button/Button.index';
 import DownCaret from '../../assets/down-arrow.png';
 import { Toast } from '../Toast/Toast.index';
+import {
+  clearSessionStorage,
+  getSessionStorage,
+} from '../../helpers/sessionStorage';
 
 function Header(props) {
   const [loginNav, setLoginNav] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isRecruiter, setIsRecruiter] = useState(false);
 
-  const { pathname } = useLocation();
+  let { location } = props;
+
   let history = useHistory();
-  const splitPath = pathname.split('/');
+  const isLoggedIn = !!getSessionStorage('token') ? true : false;
   const currentClass =
-    splitPath[1] === ''
+    location.pathname === '/'
       ? 'homepage'
-      : isLoggedIn && splitPath[2] !== 'postjob'
+      : isLoggedIn && location.pathname.split('/')[2] !== 'postjob'
       ? 'loggedin'
       : '';
 
   useEffect(() => {
-    if (splitPath[1] === 'login' || splitPath[1] === 'signup') {
+    if (
+      props.location.pathname === '/login' ||
+      props.location.pathname === '/signup'
+    ) {
       setLoginNav(false);
+    } else if (
+      props.location.pathname === '/changepassword' ||
+      props.location.pathname === '/'
+    ) {
+      setLoginNav(true);
     }
-  }, [splitPath]);
+  }, [props]);
 
-  console.log('INSIDE HEADER COMPONENT', loginNav, isLoggedIn);
   return (
     <React.Fragment>
       <header className={`container ${currentClass}`}>
         <nav className='nav'>
-          <Logo size='small' />
+          <Logo size='small' style={{ cursor: 'default' }} />
           <div className='nav_left'>
             {loginNav && !isLoggedIn ? (
               <Button onClick={() => history.push('/login')}>
                 Login/Signup
               </Button>
             ) : isLoggedIn ? (
-              <LeftHeaderNav isRecruiter={isRecruiter} />
+              <LeftHeaderNav name={props.name} {...props} />
             ) : null}
           </div>
         </nav>
@@ -49,7 +59,7 @@ function Header(props) {
   );
 }
 
-function LeftHeaderNav({ isRecruiter }) {
+function LeftHeaderNav({ name, ...restProps }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { pathname } = useLocation();
   const toastRef = useRef();
@@ -58,22 +68,39 @@ function LeftHeaderNav({ isRecruiter }) {
   const handleLogout = () => {
     history.push('/');
     setIsDropdownOpen(!isDropdownOpen);
-    toastRef.current.openToast('You have successfully logged out.', 'Logout');
+    toastRef.current.openToast('Logout', 'You have successfully logged out.');
+    clearSessionStorage();
   };
+
+  const isLoggedIn = !!getSessionStorage('token') ? true : false;
+  const isRecruiter = getSessionStorage('userRole') === '0' ? true : false;
+
+  let activeClass =
+    isLoggedIn && restProps.location.pathname.split('/')[2] === 'postjob'
+      ? ' navLinkActive'
+      : '';
+
+  name = getSessionStorage('name') || name;
 
   return (
     <React.Fragment>
       <div className='leftMenu'>
         {isRecruiter ? (
-          <NavLink className='leftMenu_link' to={`${pathname}/postjob`}>
+          <NavLink
+            className={`leftMenu_link${activeClass}`}
+            to={`${pathname}/postjob`}
+          >
             Post a Job
           </NavLink>
         ) : (
-          <NavLink className='leftMenu_link' to={`${pathname}/alljobs`}>
+          <NavLink
+            className={`leftMenu_link${activeClass}`}
+            to={`${pathname}/alljobs`}
+          >
             View all Job
           </NavLink>
         )}
-        <div className='leftMenu_avatar'>R</div>
+        <div className='leftMenu_avatar'>{name.charAt(0).toUpperCase()}</div>
         <img
           src={DownCaret}
           alt='menu'
@@ -92,5 +119,4 @@ function LeftHeaderNav({ isRecruiter }) {
   );
 }
 
-
-export default Header;
+export default withRouter(Header);

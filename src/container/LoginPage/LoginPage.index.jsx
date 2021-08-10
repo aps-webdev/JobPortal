@@ -1,30 +1,40 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
+import { useLoginController } from './useLoginController';
+import {
+  setBodyHeight,
+  setRecruiterLogged,
+  setUserAuth,
+  setUserName,
+} from '../../redux/auth/auth.action';
+
 import './LoginPage.styles.scss';
 import Input from '../../components/Input/Input.index';
 import Button from '../../components/Button/Button.index';
-import { useHistory } from 'react-router-dom';
+import { selectAuth } from '../../redux/auth/auth.selector';
 
 function LoginPage(props) {
-  const [isLoginValid, setIsLoginValid] = useState(true);
-  const [message, setMessage] = useState('All fields are mandatory.');
-  const formRef = useRef(null);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formRef.current.checkValidity()) {
-      setIsLoginValid(false);
-    } else {
-      setIsLoginValid(true);
-    }
-  };
-  let history = useHistory();
-  const handleLogin = () => {
-    if (formRef.current.checkValidity()) {
-      history.push('/recruiter');
-    }
-  };
+  const {
+    handleSubmit,
+    formRef,
+    isLoginValid,
+    message,
+    handleSignup,
+    handleForgotPassword,
+    handleInputChange,
+  } = useLoginController(props);
+
+  const bodyRef = useRef(null);
+
+  useEffect(() => {
+    props.setBodyHeight(bodyRef.current.clientHeight);
+  }, [props]);
+  
   return (
     <React.Fragment>
-      <div className='login'>
+      <div className='login' ref={bodyRef}>
         <div className='title'>Login</div>
         <form noValidate onSubmit={handleSubmit} ref={formRef}>
           <Input
@@ -34,11 +44,9 @@ function LoginPage(props) {
             placeholder='Enter your email'
             required
             isValid={isLoginValid}
+            onChange={handleInputChange}
           />
-          <div
-            className='forgotpassword'
-            onClick={() => history.push('/changepassword')}
-          >
+          <div className='forgotpassword' onClick={handleForgotPassword}>
             Forgot your password?
           </div>
           <Input
@@ -48,20 +56,21 @@ function LoginPage(props) {
             placeholder='Enter your password'
             required
             isValid={isLoginValid}
+            onChange={handleInputChange}
             style={{ marginTop: '19px' }}
           />
           <div className={`message${!isLoginValid ? ' mandatory' : ''}`}>
             {message}
           </div>
           <div className='login_button'>
-            <Button primary type='submit' onClick={handleLogin}>
+            <Button primary type='submit'>
               Login
             </Button>
           </div>
         </form>
         <div className='footer'>
           New to MyJobs?{' '}
-          <span className='footer_text' onClick={() => history.push('/signup')}>
+          <span className='footer_text' onClick={handleSignup}>
             Create an account
           </span>
         </div>
@@ -70,4 +79,16 @@ function LoginPage(props) {
   );
 }
 
-export default LoginPage;
+const mapStateToProps = createStructuredSelector({
+  isLoggedIn: selectAuth,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setUserAuth: (isLoggedIn) => dispatch(setUserAuth(isLoggedIn)),
+  setRecruiterLogged: (isRecruiter) =>
+    dispatch(setRecruiterLogged(isRecruiter)),
+  setUserName: (name) => dispatch(setUserName(name)),
+  setBodyHeight: (height) => dispatch(setBodyHeight(height)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

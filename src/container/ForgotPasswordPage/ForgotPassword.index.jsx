@@ -1,26 +1,32 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './ForgotPassword.styles.scss';
 import Input from '../../components/Input/Input.index';
 import Button from '../../components/Button/Button.index';
+import { useForgotPasswordController } from './useForgotPasswordController';
+import { Toast } from '../../components/Toast/Toast.index';
+import { connect } from 'react-redux';
+import { setBodyHeight } from '../../redux/auth/auth.action';
 
 function ForgotPasswordPage(props) {
-  const [isInputValid, setIsInputValid] = useState(true);
-  const [resetPassword, setResetPassword] = useState(false);
-  const [message, setMessage] = useState('This field is mandatory.');
-  const formRef = useRef(null);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formRef.current.checkValidity()) {
-      setIsInputValid(false);
-    } else {
-      setIsInputValid(true);
-      setResetPassword(true);
-      setMessage('All fields are mandatory.');
-    }
-  };
+  const {
+    resetPassword,
+    handleSubmit,
+    formRef,
+    isInputValid,
+    message,
+    handleInputChange,
+    toastRef,
+  } = useForgotPasswordController(props);
+
+  const bodyRef = useRef(null);
+
+  useEffect(() => {
+    props.setBodyHeight(bodyRef.current.clientHeight);
+  }, [props]);
+
   return (
     <React.Fragment>
-      <div className='forgotPassword'>
+      <div className='forgotPassword' ref={bodyRef}>
         <div className='title'>
           {!resetPassword ? `Forgot your password?` : 'Reset Your Password'}
         </div>
@@ -34,11 +40,12 @@ function ForgotPasswordPage(props) {
           {!resetPassword ? (
             <Input
               label='Email address'
-              type='email'
+              type='text'
               name='email'
               placeholder='Enter your email'
               required
               isValid={isInputValid}
+              onChange={handleInputChange}
               style={{ marginTop: '20px' }}
             />
           ) : (
@@ -46,18 +53,21 @@ function ForgotPasswordPage(props) {
               <Input
                 label='New password'
                 type='password'
+                name='password'
                 placeholder='Enter your password'
                 required
                 isValid={isInputValid}
+                onChange={handleInputChange}
                 style={{ marginTop: '20px' }}
               />
               <Input
                 label='Confirm new password'
                 type='password'
-                name='password'
+                name='confirmPassword'
                 placeholder='Enter your password'
                 required
                 isValid={isInputValid}
+                onChange={handleInputChange}
                 style={{ marginTop: '20px' }}
               />
             </>
@@ -72,8 +82,13 @@ function ForgotPasswordPage(props) {
           </div>
         </form>
       </div>
+      <Toast ref={toastRef} />
     </React.Fragment>
   );
 }
 
-export default ForgotPasswordPage;
+const mapDispatchToProps = (dispatch) => ({
+  setBodyHeight: (height) => dispatch(setBodyHeight(height)),
+});
+
+export default connect(null, mapDispatchToProps)(ForgotPasswordPage);

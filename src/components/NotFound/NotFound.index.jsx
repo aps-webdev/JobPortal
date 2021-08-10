@@ -18,7 +18,9 @@ function PageNotFound(props) {
             The page you are looking for might be removed or is temporarily
             unavailable, click hompage button below to go back.
           </div>
-          <Button primary>Homepage</Button>
+          <Button primary onClick={props.handleHomePageClick}>
+            Homepage
+          </Button>
         </article>
       </div>
     </section>

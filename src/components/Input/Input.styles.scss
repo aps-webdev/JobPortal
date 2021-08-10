@@ -65,5 +65,20 @@
       border: 1px solid #ff333380;
     }
 
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track-piece {
+      background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      width: 5px;
+      height: 10px;
+      background: #a9afbc 0% 0% no-repeat padding-box;
+      border-radius: 10px;
+      opacity: 0.9;
+    }
   }
 }

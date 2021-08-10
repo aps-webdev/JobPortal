@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './SignUpPage.styles.scss';
 import Input from '../../components/Input/Input.index';
 import Button from '../../components/Button/Button.index';
@@ -6,31 +6,35 @@ import Recruiter_primary from '../../assets/recruiter_primary.png';
 import Recruiter_secondary from '../../assets/recruiter_secondary.png';
 import Candidate_primary from '../../assets/candidates_primary.png';
 import Candidate_secondary from '../../assets/candidates_secondary.png';
-import { useHistory } from 'react-router-dom';
+import { useSignUpController } from './useSignUpController';
+import { Toast } from '../../components/Toast/Toast.index';
+import { connect } from 'react-redux';
+import { setBodyHeight } from '../../redux/auth/auth.action';
+
 function SignUpPage(props) {
-  const [isSignUpValid, setIsSignUpValid] = useState(true);
-  const [isRecuiterActive, setIsRecuiterActive] = useState(true);
-  const [isCandidateActive, setIsCandidateActive] = useState(false);
-  const [message, setMessage] = useState('All field are mandatory.');
+  const {
+    isCandidateActive,
+    isRecuiterActive,
+    isSignUpValid,
+    handleInputChange,
+    handleSubmit,
+    toggleSignUpForm,
+    message,
+    handleLogin,
+    formRef,
+    signUpFormErrorMessage,
+    toastRef,
+  } = useSignUpController(props);
 
-  let history = useHistory();
-  const formRef = useRef(null);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formRef.current.checkValidity()) {
-      setIsSignUpValid(false);
-    } else {
-      setIsSignUpValid(true);
-    }
-  };
+  const bodyRef = useRef(null);
 
-  const toggleSignUpForm = () => {
-    setIsRecuiterActive(!isRecuiterActive);
-    setIsCandidateActive(!isCandidateActive);
-  };
+  useEffect(() => {
+    props.setBodyHeight(bodyRef.current.clientHeight);
+  }, [props]);
+
   return (
     <React.Fragment>
-      <div className='signup'>
+      <div className='signup' ref={bodyRef}>
         <div className='title'>Signup</div>
         <div className='userChoice'>
           <p>I'm a*</p>
@@ -65,44 +69,64 @@ function SignUpPage(props) {
             placeholder='Enter your full name'
             required
             isValid={isSignUpValid}
+            onChange={handleInputChange}
           />
+          <div className={`message${!isSignUpValid ? ' mandatory' : ''}`}>
+            {signUpFormErrorMessage.name}
+          </div>
           <Input
             label='Email address*'
-            type='email'
+            type='text'
             name='email'
             placeholder='Enter your email'
             required
             isValid={isSignUpValid}
             style={{ marginTop: '25px' }}
+            onChange={handleInputChange}
           />
-          <div className='signup_passwords'>
-            <Input
-              label='Create Password*'
-              type='password'
-              placeholder='Enter your password'
-              required
-              isValid={isSignUpValid}
-              style={{ width: '50%', marginRight: '21px' }}
-            />
-            <Input
-              label='Confirm Password*'
-              type='password'
-              name='passowrd'
-              placeholder='Enter your password'
-              required
-              isValid={isSignUpValid}
-              style={{ width: '50%' }}
-            />
+          <div className={`message${!isSignUpValid ? ' mandatory' : ''}`}>
+            {signUpFormErrorMessage.email}
           </div>
-          {!isRecuiterActive ? (
-            <Input
-              label='Skills'
-              type='text'
-              placeholder='Enter comma separated skills'
-              isValid={isSignUpValid}
-              style={{ marginTop: '25px' }}
-            />
-          ) : null}
+
+          <div className='signup_passwords'>
+            <div className='passwordGroup'>
+              <Input
+                label='Create Password*'
+                type='password'
+                name='password'
+                placeholder='Enter your password'
+                required
+                isValid={isSignUpValid}
+                onChange={handleInputChange}
+              />
+              <div className={`message${!isSignUpValid ? ' mandatory' : ''}`}>
+                {signUpFormErrorMessage.password}
+              </div>
+            </div>
+            <div className='confirm passwordGroup'>
+              <Input
+                label='Confirm Password*'
+                type='password'
+                name='confirmPassword'
+                placeholder='Enter your password'
+                required
+                isValid={isSignUpValid}
+                onChange={handleInputChange}
+              />
+              <div className={`message${!isSignUpValid ? ' mandatory' : ''}`}>
+                {signUpFormErrorMessage.confirmPassword}
+              </div>
+            </div>
+          </div>
+          <Input
+            label='Skills'
+            type='text'
+            name='skills'
+            placeholder='Enter comma separated skills'
+            isValid={isSignUpValid}
+            style={{ marginTop: '25px' }}
+            onChange={handleInputChange}
+          />
           <div className={`message${!isSignUpValid ? ' mandatory' : ''}`}>
             {message}
           </div>
@@ -113,11 +137,19 @@ function SignUpPage(props) {
           </div>
         </form>
         <div className='footer'>
-          Have an account? <span className='footer_text' onClick={() => history.push('/login')}>Login </span>
+          Have an account?{' '}
+          <span className='footer_text' onClick={handleLogin}>
+            Login{' '}
+          </span>
         </div>
       </div>
+      <Toast ref={toastRef} />
     </React.Fragment>
   );
 }
 
-export default SignUpPage;
+const mapDispatchToProps = (dispatch) => ({
+  setBodyHeight: (height) => dispatch(setBodyHeight(height)),
+});
+
+export default connect(null, mapDispatchToProps)(SignUpPage);

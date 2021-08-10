@@ -1,8 +1,17 @@
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectHeight } from '../redux/auth/auth.selector';
 
-export default function Helper() {
+const Helper = ({ height }) => {
   return ReactDOM.createPortal(
-    <div style={{ background: '#EDF6FF', height: '100vh' }}></div>,
+    <div style={{ background: '#EDF6FF', height: height }}></div>,
     document.getElementById('root-body')
   );
-}
+};
+
+const mapStateToProps = createStructuredSelector({
+  height: selectHeight,
+});
+
+export default connect(mapStateToProps, null)(Helper);

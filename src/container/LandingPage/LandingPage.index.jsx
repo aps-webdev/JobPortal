@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import './LandingPage.styles.scss';
 
@@ -6,6 +6,8 @@ import Logo from '../../components/Logo/Logo.index';
 import Button from '../../components/Button/Button.index';
 import CoverImg from '../../assets/cover.jpg';
 import Cards from '../../components/Cards/Cards.index';
+import { setBodyHeight } from '../../redux/auth/auth.action';
+import { connect } from 'react-redux';
 
 const cardContent = [
   {
@@ -24,9 +26,15 @@ const cardContent = [
 
 function LandingPage(props) {
   let history = useHistory();
+  const bodyRef = useRef(null);
+
+  useEffect(() => {
+    props.setBodyHeight(bodyRef.current.clientHeight);
+  }, [props]);
+
   return (
     <React.Fragment>
-      <div className='bodyWrap'>
+      <div className='bodyWrap' ref={bodyRef}>
         <section className='cover'>
           <div className='cover_text'>
             <p className='cover_text_welcome'>Welcome to</p>
@@ -60,4 +68,8 @@ function LandingPage(props) {
   );
 }
 
-export default LandingPage;
+const mapDispatchToProps = (dispatch) => ({
+  setBodyHeight: (height) => dispatch(setBodyHeight(height)),
+});
+
+export default connect(null, mapDispatchToProps)(LandingPage);

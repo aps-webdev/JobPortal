@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './Modal.styles.scss';
 
 import Close from '../../assets/close.png';
+import Backdrop from '../Backdrop/Backdrop.index';
 
 function Modal({ text, description, width, children, onClose }) {
   return (
@@ -19,6 +20,7 @@ function Modal({ text, description, width, children, onClose }) {
           {children}
         </div>
       </div>
+      <Backdrop />
     </React.Fragment>
   );
 }
@@ -31,7 +33,7 @@ Modal.defaultProps = {
 
 Modal.propTypes = {
   text: PropTypes.string,
-  description: PropTypes.string
+  description: PropTypes.string,
 };
 
 export default Modal;
